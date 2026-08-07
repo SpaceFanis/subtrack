@@ -16,7 +16,7 @@ In case the user requests to view all his existing subscriptions by inputting th
 ### Editing Subscriptions
 If the user chooses to edit a subscription (number 3 in the main menu), the subscriptions are printed on screen but this time with their unique ID which the user is prompted to enter to edit the corresponding entry (user's input on IDs is checked for validity). The corresponding entry's data are reappeared one by one (name, renewal date and free trial | date of addition cannot be altered) with their previous value next to them. The user has the chance to just press enter and leave the value same as before or fill in a new value to alter the entry accordingly.
 
-## Deleting Subscriptions
+### Deleting Subscriptions
 If the user chooses to delete a subscription (number 4 in the main menu), the program follows the same logic as before with the ID checking and the corresponding entry is deleted.
 
 ###  Exiting the Program
