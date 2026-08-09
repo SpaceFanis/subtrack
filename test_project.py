@@ -176,10 +176,11 @@ def test_complete_crud_workflow_persists_across_loads(tmp_path):
     ]
 
 
-def test_load_normalizes_legacy_free_trial_and_next_id(tmp_path):
+def test_load_rejects_string_free_trial(tmp_path):
     path = tmp_path / "data.json"
     path.write_text(
         json.dumps({
+            "next_id": 4,
             "Subscriptions": [{
                 "id": 3,
                 "name": "GitHub",
@@ -191,9 +192,16 @@ def test_load_normalizes_legacy_free_trial_and_next_id(tmp_path):
         encoding="utf-8",
     )
 
-    data = load_data(path)
-    assert data["Subscriptions"][0]["free_trial"] is True
-    assert data["next_id"] == 4
+    with pytest.raises(StorageError, match="boolean free_trial"):
+        load_data(path)
+
+
+def test_load_rejects_missing_next_id(tmp_path):
+    path = tmp_path / "data.json"
+    path.write_text(json.dumps({"Subscriptions": []}), encoding="utf-8")
+
+    with pytest.raises(StorageError, match="missing 'next_id'"):
+        load_data(path)
 
 
 def test_saving_shorter_json_truncates_old_content(tmp_path, empty_data):
