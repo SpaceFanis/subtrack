@@ -35,8 +35,10 @@ def _validate_subscription(subscription):
         "renewal_price",
         "currency",
     }
-    if not required_fields.issubset(subscription):
-        raise StorageError("A subscription is missing required data.")
+    if set(subscription) != required_fields:
+        raise StorageError(
+            "Each subscription must contain exactly the required fields."
+        )
     if type(subscription["id"]) is not int or subscription["id"] < 1:
         raise StorageError("Each subscription must have a positive integer ID.")
     if (
@@ -72,12 +74,11 @@ def _validate_subscription(subscription):
 def validate_data(data):
     if not isinstance(data, dict):
         raise StorageError("Storage must contain a JSON object.")
-    if "Subscriptions" not in data:
-        raise StorageError("Storage is missing 'Subscriptions'.")
+    required_fields = {"Subscriptions", "next_id"}
+    if set(data) != required_fields:
+        raise StorageError("Storage must contain exactly the required fields.")
     if not isinstance(data["Subscriptions"], list):
         raise StorageError("'Subscriptions' must be a list.")
-    if "next_id" not in data:
-        raise StorageError("Storage is missing 'next_id'.")
     if type(data["next_id"]) is not int:
         raise StorageError("'next_id' must be an integer.")
 

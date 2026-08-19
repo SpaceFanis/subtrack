@@ -118,7 +118,8 @@ The JSON file has this shape:
 
 `renewal_price` and `currency` are both `null` when no price is provided.
 Prices are stored as exact two-decimal strings so they do not suffer from
-floating-point rounding errors.
+floating-point rounding errors. The storage validator requires exactly the
+documented fields, so missing or unexpected fields are rejected.
 
 ## Tests
 
