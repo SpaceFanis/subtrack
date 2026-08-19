@@ -351,7 +351,8 @@ def main(data_path=DATA_FILE):
         print_menu()
         choice = prompt_for_menu_choice()
         if choice == 7:
-            sys.exit("Bye!")
+            print("Bye!")
+            return
         try:
             actions[choice](data_path)
         except StorageError as error:
