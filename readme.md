@@ -1,5 +1,7 @@
 # SubTrack 1.0
 
+[![Tests](https://github.com/SpaceFanis/subtrack/actions/workflows/tests.yml/badge.svg)](https://github.com/SpaceFanis/subtrack/actions/workflows/tests.yml)
+
 SubTrack is a command-line subscription tracker that helps people notice
 renewals before they become surprises. It shows overdue, due-today, and
 upcoming renewals whenever the program starts, while keeping subscription data
@@ -30,6 +32,10 @@ system notifications.
 - Optionally store the exact amount and currency expected at the next renewal.
 - Keep stable subscription IDs after records are deleted.
 - Store data locally in `data.json` with strict validation and clear errors.
+
+## Demo
+
+![SubTrack demo](assets/demo.gif)
 
 ## Requirements
 
