@@ -46,10 +46,27 @@ def test_invalid_stored_price_formats_are_rejected(subscription, price, currency
         validate_data({"Subscriptions": [subscription], "next_id": 2})
 
 
-def test_missing_new_schema_field_is_rejected(subscription):
-    del subscription["renewal_price"]
-    with pytest.raises(StorageError, match="missing required"):
+@pytest.mark.parametrize("change", ["missing", "unexpected"])
+def test_subscription_requires_exact_schema(subscription, change):
+    if change == "missing":
+        del subscription["renewal_price"]
+    else:
+        subscription["billing_cycle"] = "monthly"
+
+    with pytest.raises(StorageError, match="exactly the required fields"):
         validate_data({"Subscriptions": [subscription], "next_id": 2})
+
+
+@pytest.mark.parametrize(
+    "data",
+    [
+        {"Subscriptions": []},
+        {"Subscriptions": [], "next_id": 1, "version": 1},
+    ],
+)
+def test_storage_requires_exact_top_level_schema(data):
+    with pytest.raises(StorageError, match="exactly the required fields"):
+        validate_data(data)
 
 
 def test_duplicate_ids_and_invalid_next_id_are_rejected(subscription):
@@ -74,6 +91,14 @@ def test_malformed_json_raises_clear_error(tmp_path):
     path.write_text("{not json", encoding="utf-8")
 
     with pytest.raises(StorageError, match="invalid JSON"):
+        load_data(path)
+
+
+def test_invalid_utf8_raises_clear_error(tmp_path):
+    path = tmp_path / "data.json"
+    path.write_bytes(b"\xff")
+
+    with pytest.raises(StorageError, match="not valid UTF-8"):
         load_data(path)
 
 
