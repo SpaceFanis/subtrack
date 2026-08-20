@@ -94,6 +94,14 @@ def test_malformed_json_raises_clear_error(tmp_path):
         load_data(path)
 
 
+def test_invalid_utf8_raises_clear_error(tmp_path):
+    path = tmp_path / "data.json"
+    path.write_bytes(b"\xff")
+
+    with pytest.raises(StorageError, match="not valid UTF-8"):
+        load_data(path)
+
+
 @pytest.mark.parametrize(
     "content",
     [

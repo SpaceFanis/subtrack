@@ -106,6 +106,8 @@ def load_data(path):
     try:
         with path.open("r", encoding="utf-8") as file:
             return validate_data(json.load(file))
+    except UnicodeDecodeError as error:
+        raise StorageError(f"Storage file is not valid UTF-8: {path}") from error
     except json.JSONDecodeError as error:
         raise StorageError(f"Storage file contains invalid JSON: {path}") from error
     except OSError as error:
